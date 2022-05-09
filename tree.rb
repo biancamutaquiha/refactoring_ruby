@@ -1,66 +1,30 @@
 require_relative 'operation'
 require_relative 'value'
+require_relative 'substraction'
 
 class Node
-    def initialize(operator, value, left, right)
-      @operator = operator
-      @value = value
-      @left = left
-      @right = right
+    def initialize(operation)
+      @operation = operation
     end
   
     def result
-      case @operator
-      when "x"
-        @left.result * @right.result
-      when "÷"
-        @left.result / @right.result
-      when "+"
-        @left.result + @right.result
-      when "-"
-        @left.result - @right.result
-      else
-        Value.new(@value.to_f).result
-      end
+      @operation.result
     end
   
     def to_s
-      case @operator
-      when "x"
-        "(#{@left.to_s} x #{@right.to_s})"
-      when "÷"
-        "(#{@left.to_s} ÷ #{@right.to_s})"
-      when "+"
-        "(#{@left.to_s} + #{@right.to_s})"
-      when "-"
-        "(#{@left.to_s} - #{@right.to_s})"
-      else
-        Value.new(@value).to_s
-      end
+      @operation.to_s
     end
   end
   
-  tree = Node.new(
-    "÷",
-    nil,
-    Node.new(
-      "+",
-      nil,
-      Node.new("", 7, nil, nil),
-      Node.new(
-        "x",
-        nil,
-        Node.new("-", nil,
-          Node.new("", 3, nil, nil),
-          Node.new("", 2, nil, nil)
-        ),
-        Node.new("", 5, nil, nil)
-      )
-    ),
-    Node.new("", 6, nil, nil)
-  );
+  tree = Node.new(Value.new(2))
 
-  tree_2 = Node.new("", 2, nil, nil)
+  tree_1 = Node.new(Value.new(2))
+
+  tree_2 = Node.new(Substraction.new(
+                                     Value.new(3),
+                                     Value.new(2)
+                                    )
+                    ) 
   
   def assert_equal(expected, actual)
     if expected != actual
@@ -79,5 +43,11 @@ class Node
     assert_equal 2, tree.result
   end
 
+  def substraction_operation(tree)
+    assert_equal "(3 - 2)", tree.to_s
+    assert_equal 1, tree.result
+  end
+
+  value_operation(tree_1)
+  substraction_operation(tree_2)
   all_operations(tree)
-  value_operation(tree_2)
