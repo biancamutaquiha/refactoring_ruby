@@ -1,6 +1,7 @@
 require_relative 'operation'
 require_relative 'value'
 require_relative 'substraction'
+require_relative 'addition'
 
 class Node
     def initialize(operation)
@@ -47,6 +48,20 @@ class Node
     assert_equal 1, tree.result
   end
 
+  def addition_substraction_operations
+    tree = Node.new(Addition.new(Value.new(3),
+                                 Substraction.new(
+                                    Value.new(3),
+                                    Value.new(2)
+                                    )
+                                )    
+                    )
+
+    assert_equal "(3 + (3 - 2))", tree.to_s
+    assert_equal 4, tree.result
+  end
+
   value_operation
   substraction_operation
+  addition_substraction_operations
   all_operations
