@@ -16,16 +16,6 @@ class Node
     end
   end
   
-  tree = Node.new(Value.new(2))
-
-  tree_1 = Node.new(Value.new(2))
-
-  tree_2 = Node.new(Substraction.new(
-                                     Value.new(3),
-                                     Value.new(2)
-                                    )
-                    ) 
-  
   def assert_equal(expected, actual)
     if expected != actual
       puts "Expected: #{expected.inspect}, got: #{actual.inspect}"
@@ -33,21 +23,30 @@ class Node
     end
   end
 
-  def all_operations(tree)
+  def all_operations
+    tree = nil
     assert_equal "((7 + ((3 - 2) x 5)) ÷ 6)", tree.to_s
     assert_equal 2, tree.result
   end
 
-  def value_operation(tree)
+  def value_operation
+    tree = Node.new(Value.new(2))
+
     assert_equal "2", tree.to_s
     assert_equal 2, tree.result
   end
 
-  def substraction_operation(tree)
+  def substraction_operation
+    tree = Node.new(Substraction.new(
+                                    Value.new(3),
+                                    Value.new(2)
+                                    )
+                    )
+
     assert_equal "(3 - 2)", tree.to_s
     assert_equal 1, tree.result
   end
 
-  value_operation(tree_1)
-  substraction_operation(tree_2)
-  all_operations(tree)
+  value_operation
+  substraction_operation
+  all_operations
