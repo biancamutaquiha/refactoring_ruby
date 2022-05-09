@@ -6,18 +6,18 @@ require_relative 'division'
 require_relative 'multiplication'
 
 class Node
-    def initialize(operation)
-      @operation = operation
+    def initialize(operations)
+      @operations = operations
     end
   
     def result
-      @operation.result
+      @operations.result
     rescue StandardError => e
       e.message
     end
   
     def to_s
-      @operation.to_s
+      @operations.to_s
     end
   end
   
@@ -29,16 +29,17 @@ class Node
   end
 
   def all_operations
-    tree = Division.new(
-        Addition.new(
-          Value.new(7),
-          Multiplication.new(
-            Substraction.new(Value.new(3), Value.new(2)),
-            Value.new(5)  
-          )
-        ),
-        Value.new(6)
-      )
+    tree = Node.new(Division.new(
+                      Addition.new(
+                        Value.new(7),
+                        Multiplication.new(
+                          Substraction.new(Value.new(3), Value.new(2)),
+                      Value.new(5)  
+                                           )
+                                    ),
+                    Value.new(6)
+                                  )
+                    ) 
 
     assert_equal "((7 + ((3 - 2) x 5)) ÷ 6)", tree.to_s
     assert_equal 2, tree.result
