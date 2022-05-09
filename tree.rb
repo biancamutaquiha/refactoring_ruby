@@ -1,3 +1,6 @@
+require_relative 'operation'
+require_relative 'value'
+
 class Node
     def initialize(operator, value, left, right)
       @operator = operator
@@ -17,7 +20,7 @@ class Node
       when "-"
         @left.result - @right.result
       else
-        @value.to_f
+        Value.new(@value.to_f).result
       end
     end
   
@@ -32,7 +35,7 @@ class Node
       when "-"
         "(#{@left.to_s} - #{@right.to_s})"
       else
-        @value.to_s
+        Value.new(@value).to_s
       end
     end
   end
@@ -56,6 +59,8 @@ class Node
     ),
     Node.new("", 6, nil, nil)
   );
+
+  tree_2 = Node.new("", 2, nil, nil)
   
   def assert_equal(expected, actual)
     if expected != actual
@@ -63,6 +68,16 @@ class Node
       exit 1
     end
   end
-  
-  assert_equal "((7 + ((3 - 2) x 5)) ÷ 6)", tree.to_s
-  assert_equal 2, tree.result
+
+  def all_operations(tree)
+    assert_equal "((7 + ((3 - 2) x 5)) ÷ 6)", tree.to_s
+    assert_equal 2, tree.result
+  end
+
+  def value_operation(tree)
+    assert_equal "2", tree.to_s
+    assert_equal 2, tree.result
+  end
+
+  all_operations(tree)
+  value_operation(tree_2)
